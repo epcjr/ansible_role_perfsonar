@@ -1,0 +1,10 @@
+---
+# defaults file for ansible-role-perfsonar/
+perfsonar_users: []
+perfsonar_bastion_hosts: []
+perfsonar_disable_root_ssh : false
+perfsonar_nameservers: []
+perfsonar_ntpservers: []
+perfsonar_web_passwd: 
+perfsonar_web_user:
+perfsonar_troubleshoot: []

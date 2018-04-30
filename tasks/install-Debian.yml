@@ -1,0 +1,19 @@
+---
+# install-Debian.yml
+#
+
+- name: Import perfSONAR repository signing key (Debian based systems)
+  apt_key:
+    url: http://downloads.perfsonar.net/debian/perfsonar-debian-official.gpg.key
+    state: present
+
+- name: Add perfSONAR repository (Debian based systems)
+  apt_repository:
+    repo: deb http://downloads.perfsonar.net/debian/ perfsonar-jessie-release main
+    state: present
+
+- name: Install system updates (Debian based systems)
+  apt:
+    upgrade: dist
+    update_cache: yes
+  ignore_errors: True

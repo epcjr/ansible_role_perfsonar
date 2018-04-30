@@ -1,0 +1,96 @@
+---
+# tasks file for ansible-role-perfsonar/
+
+### check for perfsonar_package syntax
+
+- name: hosts.allow for perfsonar_bastion hosts
+  lineinfile:
+    path: /etc/hosts.allow
+    line: "sshd: {{ item }}"
+  with_items: "{{ perfsonar_bastion_hosts }}"
+  when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
+
+- name: hosts.deny sshd all for perfsonar_bastion hosts
+  lineinfile:
+    path: /etc/hosts.deny
+    line: "sshd: all"
+  when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
+
+- name: set perfsonar_hostname
+  hostname:
+    name: "{{ item }}"
+  with_items: "{{ perfsonar_hostname }}"
+  when: perfsonar_hostname is defined
+
+- name: group pssudo
+  group:
+    name: pssudo
+    state: present
+
+- name: adduser pssudo perfsonar_users
+  user:
+    name: "{{ item }}"
+    groups: pssudo
+  with_items: "{{ perfsonar_users }}"
+  when: perfsonar_users is defined and perfsonar_users != none
+
+- name: set up authkeys for perfsonar_users
+  authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', '/home/{{ item }}/.ssh/id_rsa.pub')}}"
+  with_items: "{{ perfsonar_users }}"
+  when: perfsonar_users is defined and perfsonar_users != none
+
+- name: disable root ssh
+  lineinfile:
+    state: present
+    path: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+  when: perfsonar_disable_root_ssh is defined and perfsonar_disable_root_ssh == true
+  notify:
+    - restart ssh
+
+- name: resolv.conf perfsonar_nameservers
+  lineinfile:
+    path: /etc/resolv.conf
+    line: "nameserver {{ item }}"
+  with_items: "{{ perfsonar_nameservers }}"
+  when: perfsonar_nameservers is defined and perfsonar_nameservers != none
+
+- name: OS Specific Install
+  include_tasks: install-RedHat.yml
+  when: ansible_os_family == "RedHat"
+
+- name: OS Specific Install
+  include_tasks: install-Debian.yml
+  when: ansible_os_family == "Debian"
+
+- name: perfsonar-testpoint tasks
+  include_tasks: ps-testpoint.yml
+  when: perfsonar_package == "perfsonar-testpoint"
+
+- name: install package
+  package:
+    name: "{{ perfsonar_package }}"
+    state: latest
+
+- name: add ntpservers
+  lineinfile:
+    path: /etc/ntp.conf
+    line: "server {{ item }}"
+  with_items: "{{ perfsonar_ntpservers }}"
+  when: perfsonar_ntpservers is defined and perfsonar_ntpservers != none
+  notify:
+    - restart ntp
+
+- name: perfsonar_interface config
+  command: /usr/lib/perfsonar/scripts/mod_interface_route --command add --device "{{ item['name'] }}" --ipv4_gateway "{{ item['ipv4_gateway'] }}"
+  with_items: "{{ perfsonar_interfaces }}"
+  when: perfsonar_interfaces is defined and perfsonar_interfaces != none
+
+- name: troubleshoot pscheduler
+  command: pscheduler troubleshoot "{{ item }}"
+  with_items: "{{ perfsonar_troubleshoot }}"
+  when: perfsonar_troubleshoot is defined and perfsonar_troubleshoot != none
+

@@ -1,0 +1,24 @@
+---
+# install-RedHat.yml
+#
+
+- name: yum epel-release
+  yum:
+    name: epel-release
+    state: latest
+
+- name: yum repo
+  yum:
+    name: http://software.internet2.edu/rpms/el7/x86_64/main/RPMS/perfSONAR-repo-0.8-1.noarch.rpm
+    state: present
+
+- name: yum clean all
+  yum:
+    name: clean all
+
+- name: Install system updates
+  yum:
+    name: '*'
+    state: latest
+    update_cache: yes
+  ignore_errors: True

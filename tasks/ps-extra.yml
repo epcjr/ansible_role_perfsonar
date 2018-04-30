@@ -1,0 +1,40 @@
+---
+# ps-extra.yml
+#
+
+- name: perfSONAR ntp script
+  command: /usr/lib/perfsonar/scripts/configure_ntpd new
+  when: perfsonar_toolkit_ntp is defined and perfsonar_toolkit_ntp == true
+  notify:
+    - restart ntp
+
+- name: add ntpservers
+  lineinfile:
+    path: /etc/ntp.conf
+    line: "server {{ item }}"
+  with_items: "{{ ntpservers }}"
+  when: ntpservers is defined and ntpservers != none
+  notify:
+    - restart ntp
+
+- name: perfSONAR configure_sysctl performance tuning
+  command: /usr/lib/perfsonar/scripts/configure_sysctl
+  when: perfsonar_toolkit_configure_sysctl is defined and
+        perfsonar_toolkit_configure_sysctl == true
+
+- name: perfSONAR security script
+  command: /usr/lib/perfsonar/scripts/configure_firewall install
+  when: perfsonar_toolkit_security is defined and
+        perfsonar_toolkit_security == true
+
+- name: perfsonar yum autoupdate
+  systemd:
+    name: yum-cron
+    state: started
+    enabled: yes
+  when: perfsonar_yum_autoupdate is defined and perfsonar_yum_autoupdate == true
+
+- name: perfSONAR service_watcher script
+  command: /usr/lib/perfsonar/scripts/service_watcher
+  when: perfsonar_toolkit_service_watcher is defined and
+        perfsonar_toolkit_service_watcher == true
