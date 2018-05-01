@@ -1,7 +1,11 @@
 ---
 # tasks file for ansible-role-perfsonar/
 
-### check for perfsonar_package syntax
+- name: check to see if we support the requested package
+  fail:
+    msg: "Unsupported package requested"
+  when: perfsonar_package != "perfsonar-toolkit" and
+        perfsonar_package != "perfsonar-testpoint"
 
 - name: set perfsonar_hostname
   hostname:
@@ -74,6 +78,10 @@
 - name: perfsonar-testpoint tasks
   include_tasks: ps-testpoint.yml
   when: perfsonar_package == "perfsonar-testpoint"
+
+- name: perfsonar-testpoint optional software
+  include_tasks: ps-optional.yml
+  when: perfsonar_package == "perfsonar-toolkit"
 
 - name: add ntpservers
   lineinfile:

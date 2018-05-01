@@ -3,9 +3,9 @@
 #
 
 - name: Make sure we can use htpasswd module
-  yum:
+  package:
     name: python-passlib
-    state: installed
+    state: latest
   when: perfsonar_web_passwd is defined and perfsonar_web_password is not none and
         perfsonar_web_user is defined and perfsonar_web_user is not none
 
