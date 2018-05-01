@@ -20,5 +20,4 @@
     state: present
 
 - name: yum clean all
-  yum:
-    name: clean all
+  command: yum clean all

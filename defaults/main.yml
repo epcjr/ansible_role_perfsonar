@@ -1,6 +1,8 @@
 ---
 # defaults file for ansible-role-perfsonar/
 
+perfsonar_package:
+
 # group vars
 perfsonar_users: []
 perfsonar_bastion_hosts: []
@@ -9,11 +11,11 @@ perfsonar_nameservers: []
 perfsonar_ntpservers: []
 perfsonar_troubleshoot: []
 
-# testpoint vars
+# toolkit vars
 perfsonar_web_passwd:
 perfsonar_web_user:
 
-# toolkit vars
+# testpoint vars
 perfsonar_toolkit_ntp: false
 perfsonar_toolkit_sysctl: false
 perfsonar_toolkit_security: false
