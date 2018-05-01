@@ -48,16 +48,6 @@
   with_items: "{{ perfsonar_users }}"
   when: perfsonar_users is defined and perfsonar_users != none
 
-- name: disable root ssh
-  lineinfile:
-    state: present
-    path: /etc/ssh/sshd_config
-    regexp: "^PermitRootLogin"
-    line: "PermitRootLogin no"
-  when: perfsonar_disable_root_ssh is defined and perfsonar_disable_root_ssh == true
-  notify:
-    - restart ssh
-
 - name: resolv.conf perfsonar_nameservers
   lineinfile:
     path: /etc/resolv.conf
@@ -99,6 +89,16 @@
   command: /usr/lib/perfsonar/scripts/mod_interface_route --command add --device "{{ item['name'] }}" --ipv4_gateway "{{ item['ipv4_gateway'] }}"
   with_items: "{{ perfsonar_interfaces }}"
   when: perfsonar_interfaces is defined and perfsonar_interfaces != none
+
+- name: disable root ssh
+  lineinfile:
+    state: present
+    path: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+  when: perfsonar_disable_root_ssh is defined and perfsonar_disable_root_ssh == true
+  notify:
+    - restart ssh
 
 - name: troubleshoot pscheduler
   command: pscheduler troubleshoot "{{ item }}"
