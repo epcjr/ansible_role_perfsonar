@@ -24,6 +24,6 @@
         perfsonar_web_user is defined and perfsonar_web_user is not none
 
 - name: restart ntp
-  echo: restart ntp
+  command: echo restart ntp
   notify:
     - restart ntp
