@@ -1,6 +1,9 @@
 ---
 # tasks file for ansible-role-perfsonar/
 
+- name: debugging
+  command: "echo {{ perfsonar_package }}"
+
 - name: check to see if we support the requested package
   fail:
     msg: "Unsupported package requested"
