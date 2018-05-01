@@ -79,11 +79,11 @@
     state: latest
 
 - name: perfsonar-testpoint tasks
-  include_tasks: ps-testpoint.yml
+  include_tasks: optional.yml
   when: perfsonar_package == "perfsonar-testpoint"
 
-- name: perfsonar-testpoint optional software
-  include_tasks: ps-optional.yml
+- name: perfsonar-toolkit optional software
+  include_tasks: toolkit.yml
   when: perfsonar_package == "perfsonar-toolkit"
 
 - name: add ntpservers
