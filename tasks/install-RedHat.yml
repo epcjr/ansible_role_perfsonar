@@ -2,6 +2,13 @@
 # install-RedHat.yml
 #
 
+- name: Install system updates
+  yum:
+    name: '*'
+    state: latest
+    update_cache: yes
+  ignore_errors: True
+
 - name: yum epel-release
   yum:
     name: epel-release
@@ -15,10 +22,3 @@
 - name: yum clean all
   yum:
     name: clean all
-
-- name: Install system updates
-  yum:
-    name: '*'
-    state: latest
-    update_cache: yes
-  ignore_errors: True

@@ -3,6 +3,12 @@
 
 ### check for perfsonar_package syntax
 
+- name: set perfsonar_hostname
+  hostname:
+    name: "{{ item }}"
+  with_items: "{{ perfsonar_hostname }}"
+  when: perfsonar_hostname is defined
+
 - name: hosts.allow for perfsonar_bastion hosts
   lineinfile:
     path: /etc/hosts.allow
@@ -15,12 +21,6 @@
     path: /etc/hosts.deny
     line: "sshd: all"
   when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
-
-- name: set perfsonar_hostname
-  hostname:
-    name: "{{ item }}"
-  with_items: "{{ perfsonar_hostname }}"
-  when: perfsonar_hostname is defined
 
 - name: group pssudo
   group:
@@ -58,22 +58,22 @@
   with_items: "{{ perfsonar_nameservers }}"
   when: perfsonar_nameservers is defined and perfsonar_nameservers != none
 
-- name: OS Specific Install
+- name: RedHat Specific Install
   include_tasks: install-RedHat.yml
   when: ansible_os_family == "RedHat"
 
-- name: OS Specific Install
+- name: Debian Specific Install
   include_tasks: install-Debian.yml
   when: ansible_os_family == "Debian"
-
-- name: perfsonar-testpoint tasks
-  include_tasks: ps-testpoint.yml
-  when: perfsonar_package == "perfsonar-testpoint"
 
 - name: install package
   package:
     name: "{{ perfsonar_package }}"
     state: latest
+
+- name: perfsonar-testpoint tasks
+  include_tasks: ps-testpoint.yml
+  when: perfsonar_package == "perfsonar-testpoint"
 
 - name: add ntpservers
   lineinfile:
