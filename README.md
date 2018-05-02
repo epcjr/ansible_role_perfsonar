@@ -79,10 +79,26 @@ Testpoint Variables.  These can elect to use optional packages normally included
 
       # See more here: http://docs.perfsonar.net/install_centos.html
       #
+      
+      # NTP more info: http://docs.perfsonar.net/manage_ntp.html
+      #
       perfsonar_toolkit_ntp: false
+      
+      # System Tuning info here: http://docs.perfsonar.net/install_centos.html#step-3-verify-ntp-and-tuning-parameters
+      # More here: http://docs.perfsonar.net/manage_tuning.html
+      #
       perfsonar_toolkit_configure_sysctl: false
+      
+      # Security module more info: http://docs.perfsonar.net/install_centos.html#step-4-firewall-and-security-considerations
+      # More here: http://docs.perfsonar.net/manage_security.html
       perfsonar_toolkit_security: false
+      
+      # Autoupdate more info: http://docs.perfsonar.net/manage_update.html
+      #
       perfsonar_autoupdate: false
+      
+      # Service watcher info: http://docs.perfsonar.net/install_centos.html#step-6-service-watcher
+      #
       perfsonar_toolkit_service_watcher: false
 
 Dependencies
