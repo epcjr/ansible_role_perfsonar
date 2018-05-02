@@ -1,4 +1,4 @@
-perfSONAR installer
+perfSONAR
 =========
 
 This perfSONAR role sets up toolkit and testpoint perfSONAR nodes.
