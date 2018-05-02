@@ -9,6 +9,8 @@ Requirements
 * Ansile on the jumpbox / bastion host
 * perfSONAR role installed
 
+      ansible-galaxy install -f epcjr.perfsonar
+
 Role Variables
 --------------
 
