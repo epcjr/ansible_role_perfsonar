@@ -113,9 +113,13 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: testpoints
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: epcjr.perfsonar, perfsonar_bundle: testpoint }
+
+    - hosts: toolkits
+      roles:
+         - { role: epcjr.perfsonar, perfsonar_bundle: toolkit }
 
 License
 -------
