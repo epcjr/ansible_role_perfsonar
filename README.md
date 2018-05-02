@@ -18,8 +18,8 @@ Group Variables, and their default values:
 
       # Which perfSONAR bundle you would like to install.
       # We currently support:
-      #   toolkit
-      #   testpoint
+      #   perfsonar-toolkit
+      #   perfsonar-testpoint
       #
       # This is a required option.
       #
