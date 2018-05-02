@@ -1,17 +1,89 @@
-Role Name
+perfSONAR installer
 =========
 
-A brief description of the role goes here.
+This perfSONAR role sets up toolkit and testpoint perfSONAR nodes.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+* Ansile on the jumpbox / bastion host
+* perfSONAR role installed
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Group Variables, and their default values:
+
+      # Which perfSONAR bundle you would like to install.
+      # We currently support:
+      #   toolkit
+      #   testpoint
+      #
+      # This is a required option.
+      #
+      perfsonar_bundle: 
+      
+      # This is a list of local users with ssh keys.  They will be
+      # provisioned with user accounts on the perfSONAR nodes, and
+      # their ssh keys will be copied over.
+      #
+      perfsonar_users: []
+      
+      # This is a list of bastion hosts.  If this list is populated,
+      # ssh will be restricted on the perfSONAR nodes to these machines
+      # only.
+      #
+      perfsonar_bastion_hosts: []
+      
+      # Disable root ssh if true
+      #
+      perfsonar_disable_root_ssh : false
+      
+      # A list of nameservers to add to resolv.conf
+      #
+      perfsonar_nameservers: []
+      
+      # A list of ntp servers to add to ntpd.conf
+      #
+      perfsonar_ntpservers: []
+      
+      # A list of perfSONAR nodes to initially troubleshoot to after install.
+      #
+      perfsonar_troubleshoot: []
+
+
+Host Variables, only set on a per-host basis.  They are undeclared by default.
+
+      # Set the hostname of the machine if set
+      #
+      perfsonar_hostname:
+      
+      # This is used for multi-interface machines only.
+      # Define the interface's name and gateway and it will set up the routes
+      # with the perfSONAR multi-interface script.
+      #
+      # See more here: http://docs.perfsonar.net/manage_dual_xface.html
+      #
+      perfsonar_interfaces:
+        - name:
+          ipv4_gateway:
+        - name:
+          ipv4_gateway:
+          
+Toolkit Variables.  These manage the toolkit's web user.  They are undeclared by default.
+
+      perfsonar_web_user:
+      perfsonar_web_passwd:
+  
+Testpoint Variables.  These can elect to use optional packages normally included in the toolkit.
+
+      # See more here: http://docs.perfsonar.net/install_centos.html
+      #
+      perfsonar_toolkit_ntp: false
+      perfsonar_toolkit_configure_sysctl: false
+      perfsonar_toolkit_security: false
+      perfsonar_autoupdate: false
+      perfsonar_toolkit_service_watcher: false
 
 Dependencies
 ------------
