@@ -52,24 +52,6 @@ Group Variables, and their default values:
       perfsonar_troubleshoot: []
 
 
-Host Variables, only set on a per-host basis.  They are undeclared by default.
-
-      # Set the hostname of the machine if set
-      #
-      perfsonar_hostname:
-      
-      # This is used for multi-interface machines only.
-      # Define the interface's name and gateway and it will set up the routes
-      # with the perfSONAR multi-interface script.
-      #
-      # See more here: http://docs.perfsonar.net/manage_dual_xface.html
-      #
-      perfsonar_interfaces:
-        - name:
-          ipv4_gateway:
-        - name:
-          ipv4_gateway:
-          
 Toolkit Variables.  These manage the toolkit's web user.  They are undeclared by default.
 
       perfsonar_web_user:
@@ -100,6 +82,24 @@ Testpoint Variables.  These can elect to use optional packages normally included
       # Service watcher info: http://docs.perfsonar.net/install_centos.html#step-6-service-watcher
       #
       perfsonar_toolkit_service_watcher: false
+      
+Host Variables, only set on a per-host basis.  They are undeclared by default.
+
+      # Set the hostname of the machine if set
+      #
+      perfsonar_hostname:
+      
+      # This is used for multi-interface machines only.
+      # Define the interface's name and gateway and it will set up the routes
+      # with the perfSONAR multi-interface script.
+      #
+      # See more here: http://docs.perfsonar.net/manage_dual_xface.html
+      #
+      perfsonar_interfaces:
+        - name:
+          ipv4_gateway:
+        - name:
+          ipv4_gateway:
 
 Dependencies
 ------------
