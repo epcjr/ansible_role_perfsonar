@@ -86,7 +86,7 @@
     - restart ntp
 
 - name: perfsonar_interface config
-  command: /usr/lib/perfsonar/scripts/mod_interface_route --command add --device "{{ item['name'] }}" --ipv4_gateway "{{ item['ipv4_gateway'] }}"
+  command: /usr/lib/perfsonar/scripts/mod_interface_route --command add --device "{{ item['interface_name'] }}" --ipv4_gateway "{{ item['interface_gateway_ipv4'] }}"
   with_items: "{{ perfsonar_interfaces }}"
   when: perfsonar_interfaces is defined and perfsonar_interfaces != none
 
