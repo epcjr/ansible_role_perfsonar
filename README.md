@@ -115,17 +115,17 @@ site.yml:
 
     - hosts: testpoints
       vars_files:
-        - vars/perfsonar.yml
+        - vars/perfsonar_vars.yml
       roles:
          - { role: epcjr.perfsonar, perfsonar_bundle: testpoint }
 
     - hosts: toolkits
       vars_files:
-        - vars/perfsonar.yml
+        - vars/perfsonar_vars.yml
       roles:
          - { role: epcjr.perfsonar, perfsonar_bundle: toolkit }
 
-perfsonar.yml:
+vars/perfsonar_vars.yml:
 
       # general perfsonar node settings
       perfsonar_users:
@@ -154,7 +154,15 @@ perfsonar.yml:
       perfsonar_toolkit_security: true
       perfsonar_autoupdate: true
       perfsonar_toolkit_service_watcher: true
+      
+host_vars/example_host
 
+      perfsonar_hostname: example_host
+      perfsonar_interfaces:
+        - name: em0
+          ipv4_gateway: 1.2.3.4
+        - name: p0p0
+          ipv4_gateway: 5.6.7.8
 
 
 
