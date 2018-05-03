@@ -111,7 +111,7 @@ None.
 Example Playbook
 ----------------
 
-site.yml:
+perfsonar_site.yml:
 
     - hosts: testpoints
       vars_files:
@@ -145,8 +145,10 @@ vars/perfsonar_vars.yml:
         - perfsonardev0.internet2.edu
       
       # Variables for Toolkits Only
-      perfsonar_web_passwd: super_secure_password
       perfsonar_web_user: pswebadmin
+      # secrets can be encrypted with Ansible vault:
+      # ansible-vault encrypt_string 'secret' --ask-vault-pass --name=perfsonar_web_passwd
+      perfsonar_web_passwd: secret
       
       #Variables for Testpoints Only
       perfsonar_toolkit_ntp: true
@@ -155,9 +157,10 @@ vars/perfsonar_vars.yml:
       perfsonar_autoupdate: true
       perfsonar_toolkit_service_watcher: true
       
-host_vars/example_host
+host_vars/example_ps_host
 
-      perfsonar_hostname: example_host
+      # Set hostname and configure multiple interfaces
+      perfsonar_hostname: example_ps_host
       perfsonar_interfaces:
         - name: em0
           ipv4_gateway: 1.2.3.4
