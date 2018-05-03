@@ -111,15 +111,52 @@ None.
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+site.yml:
 
     - hosts: testpoints
+      vars_files:
+        - vars/perfsonar.yml
       roles:
          - { role: epcjr.perfsonar, perfsonar_bundle: testpoint }
 
     - hosts: toolkits
+      vars_files:
+        - vars/perfsonar.yml
       roles:
          - { role: epcjr.perfsonar, perfsonar_bundle: toolkit }
+
+perfsonar.yml:
+
+      # general perfsonar node settings
+      perfsonar_users:
+        - myuid
+      perfsonar_bastion_hosts:
+        - bastion.example.com
+      perfsonar_disable_root_ssh: true
+      # Use Google's public nameservers
+      perfsonar_nameservers:
+        - 8.8.8.8
+        - 8.8.4.4
+      # add Google's ntp server
+      perfsonar_ntpservers:
+        - 216.239.35.0
+      # troubleshoot to I2
+      perfsonar_troubleshoot:
+        - perfsonardev0.internet2.edu
+      
+      # Variables for Toolkits Only
+      perfsonar_web_passwd: super_secure_password
+      perfsonar_web_user: pswebadmin
+      
+      #Variables for Testpoints Only
+      perfsonar_toolkit_ntp: true
+      perfsonar_toolkit_configure_sysctl: true
+      perfsonar_toolkit_security: true
+      perfsonar_autoupdate: true
+      perfsonar_toolkit_service_watcher: true
+
+
+
 
 License
 -------
