@@ -127,7 +127,7 @@ perfsonar_site.yml:
 
 vars/perfsonar_vars.yml:
 
-      # general perfsonar node settings
+      # General perfsonar node settings
       perfsonar_users:
         - myuid
       perfsonar_bastion_hosts:
@@ -162,10 +162,10 @@ host_vars/example_ps_host
       # Set hostname and configure multiple interfaces
       perfsonar_hostname: example_ps_host
       perfsonar_interfaces:
-        - name: em0
-          ipv4_gateway: 1.2.3.4
-        - name: p0p0
-          ipv4_gateway: 5.6.7.8
+        - interface_name: em0
+          interface_gateway_ipv4: 1.2.3.4
+        - interface_name: p0p0
+          interface_gateway_ipv4: 5.6.7.8
 
 
 
