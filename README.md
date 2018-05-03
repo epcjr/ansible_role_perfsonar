@@ -6,10 +6,10 @@ This perfSONAR role sets up toolkit and testpoint perfSONAR nodes.
 Requirements
 ------------
 
-* Ansile on the jumpbox / bastion host
+* Ansible on the jumpbox / bastion host
 * perfSONAR role installed
 
-      ansible-galaxy install -f epcjr.perfsonar
+      $ ansible-galaxy install -f epcjr.perfsonar
 
 Role Variables
 --------------
