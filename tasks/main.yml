@@ -1,27 +1,13 @@
 ---
 # tasks file for ansible-role-perfsonar/
 
-### Autoupdate RedHat
-- name: perfsonar yum autoupdate
-  service:
-    name: yum-cron
-    state: started
-    enabled: yes
-  when: perfsonar_autoupdate is defined and perfsonar_autoupdate == true and
-        ansible_os_family == "RedHat"
-
-- meta: end_play
-
-- name: debugging
-  command: "echo {{ perfsonar_package }}"
-
-- name: check to see if we support the requested package
+- name: check to see if requested package is supported "{{ perfsonar_package }}"
   fail:
     msg: "Unsupported package requested"
   when: perfsonar_package != "perfsonar-toolkit" and
         perfsonar_package != "perfsonar-testpoint"
 
-- name: set perfsonar_hostname
+- name: set perfsonar_hostname "{{ perfsonar_hostname }}"
   hostname:
     name: "{{ item }}"
   with_items: "{{ perfsonar_hostname }}"
