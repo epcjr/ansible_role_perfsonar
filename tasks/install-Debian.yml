@@ -17,3 +17,16 @@
     upgrade: dist
     update_cache: yes
   ignore_errors: True
+
+### Autoupdate Debian
+- name: download perfSONAR unattended-upgrades package
+  package:
+    name: unattended-upgrades
+    state: latest
+  when: perfsonar_autoupdate is defined and perfsonar_autoupdate == true and
+        ansible_os_family == "Debian"
+
+- name: execute perfSONAR unattended-upgrades package
+  command: /usr/lib/perfsonar/scripts/system_environment/enable_auto_updates new
+  when: perfsonar_autoupdate is defined and perfsonar_autoupdate == true and
+        ansible_os_family == "Debian"

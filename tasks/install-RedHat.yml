@@ -21,3 +21,12 @@
 
 - name: yum clean all
   command: yum clean all
+
+### Autoupdate RedHat
+- name: perfsonar yum autoupdate
+  service:
+    name: yum-cron
+    state: started
+    enabled: yes
+  when: perfsonar_autoupdate is defined and perfsonar_autoupdate == true and
+        ansible_os_family == "RedHat"

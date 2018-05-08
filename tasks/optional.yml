@@ -41,28 +41,6 @@
   when: perfsonar_toolkit_security is defined and
         perfsonar_toolkit_security == true
 
-### Autoupdate RedHat
-- name: perfsonar yum autoupdate
-  systemd:
-    name: yum-cron
-    state: started
-    enabled: yes
-  when: perfsonar_autoupdate is defined and perfsonar_autoupdate == true and
-        ansible_os_family == "RedHat"
-
-### Autoupdate Debian
-- name: download perfSONAR unattended-upgrades package
-  package:
-    name: unattended-upgrades
-    state: latest
-  when: perfsonar_autoupdate is defined and perfsonar_autoupdate == true and
-        ansible_os_family == "Debian"
-
-- name: execute perfSONAR unattended-upgrades package
-  command: /usr/lib/perfsonar/scripts/system_environment/enable_auto_updates new
-  when: perfsonar_autoupdate is defined and perfsonar_autoupdate == true and
-        ansible_os_family == "Debian"
-
 ### Servicewatcher
 - name: download perfSONAR service_watcher
   package:
