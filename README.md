@@ -16,14 +16,14 @@ Role Variables
 
 Group Variables, and their default values:
 
-      # Which perfSONAR bundle you would like to install.
+      # Which perfSONAR package you would like to install.
       # We currently support:
       #   perfsonar-toolkit
       #   perfsonar-testpoint
       #
       # This is a required option.
       #
-      perfsonar_bundle: 
+      perfsonar_package: 
       
       # This is a list of local users with ssh keys.  They will be
       # provisioned with user accounts on the perfSONAR nodes, and
