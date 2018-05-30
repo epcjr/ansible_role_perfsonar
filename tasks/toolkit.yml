@@ -11,7 +11,7 @@
 
 - name: cleartext perfsonar_web_passwd
   command: "echo {{ perfsonar_web_passwd }}"
-  when: perfsonar_web_passwd is defined and perfsonar_web_password is not none and
+  when: perfsonar_web_passwd is defined and perfsonar_web_passwd is not none and
         perfsonar_show_password == true
 
 - name: htpasswd for perfsonar_web_user

@@ -117,13 +117,13 @@ perfsonar_site.yml:
       vars_files:
         - vars/perfsonar_vars.yml
       roles:
-         - { role: epcjr.perfsonar, perfsonar_bundle: testpoint }
+         - { role: epcjr.perfsonar, perfsonar_package: perfsonar-testpoint }
 
     - hosts: toolkits
       vars_files:
         - vars/perfsonar_vars.yml
       roles:
-         - { role: epcjr.perfsonar, perfsonar_bundle: toolkit }
+         - { role: epcjr.perfsonar, perfsonar_package: perfsonar-toolkit }
 
 vars/perfsonar_vars.yml:
 
