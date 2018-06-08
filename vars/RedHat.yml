@@ -1,0 +1,3 @@
+---
+# RedHat OS Variables
+ntp_service: ntpd

@@ -1,16 +1,24 @@
 ---
 # tasks file for ansible-role-perfsonar/
 
-- name: check to see if requested package is supported "{{ perfsonar_package }}"
-  fail:
-    msg: "Unsupported package requested"
-  when: perfsonar_package != "perfsonar-toolkit" and
-        perfsonar_package != "perfsonar-testpoint"
+- name: Load variables based on OS type
+  include_vars: "{{ item }}"
+  tags: [ 'always' ]
+  with:
+    - "{{ ansible_os_family }}.yml"
 
-- name: set perfsonar_hostname "{{ perfsonar_hostname }}"
+- name: check to see if requested bundle is supported "{{ perfsonar_bundle }}"
+  fail:
+    msg: "Unsupported bundle requested"
+  tags: [ 'ps:install' ]
+  when: perfsonar_bundle != "perfsonar-toolkit" and
+        perfsonar_bundle != "perfsonar-testpoint"
+
+- name: set perfsonar_hostname
   hostname:
     name: "{{ item }}"
   with_items: "{{ perfsonar_hostname }}"
+  tags: [ 'ps:config' ]
   when: perfsonar_hostname is defined
 
 - name: hosts.allow for perfsonar_bastion hosts
@@ -18,24 +26,28 @@
     path: /etc/hosts.allow
     line: "sshd: {{ item }}"
   with_items: "{{ perfsonar_bastion_hosts }}"
+  tags: [ 'ps:config' ]
   when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
 
 - name: hosts.deny sshd all for perfsonar_bastion hosts
   lineinfile:
     path: /etc/hosts.deny
     line: "sshd: all"
+  tags: [ 'ps:config' ]
   when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
 
 - name: group pssudo
   group:
     name: pssudo
     state: present
+  tags: [ 'ps:config' ]
 
 - name: adduser pssudo perfsonar_users
   user:
     name: "{{ item }}"
     groups: pssudo
   with_items: "{{ perfsonar_users }}"
+  tags: [ 'ps:config' ]
   when: perfsonar_users is defined and perfsonar_users != none
 
 - name: set up authkeys for perfsonar_users
@@ -43,6 +55,7 @@
     user: "{{ item }}"
     key: "{{ lookup('file', '/home/{{ item }}/.ssh/id_rsa.pub')}}"
   with_items: "{{ perfsonar_users }}"
+  tags: [ 'ps:config' ]
   when: perfsonar_users is defined and perfsonar_users != none
 
 - name: resolv.conf perfsonar_nameservers
@@ -50,34 +63,44 @@
     path: /etc/resolv.conf
     line: "nameserver {{ item }}"
   with_items: "{{ perfsonar_nameservers }}"
+  tags: [ 'ps:config' ]
   when: perfsonar_nameservers is defined and perfsonar_nameservers != none
 
 - name: RedHat Specific Install
   include_tasks: install-RedHat.yml
+  tags: [ 'ps::install' ]
   when: ansible_os_family == "RedHat"
 
 - name: Debian Specific Install
   include_tasks: install-Debian.yml
+  tags: [ 'ps::install' ]
   when: ansible_os_family == "Debian"
 
-- name: install package
+- name: install bundle
   package:
-    name: "{{ perfsonar_package }}"
+    name: "{{ perfsonar_bundle }}"
     state: latest
-
-- name: perfsonar-testpoint tasks
-  include_tasks: optional.yml
-  when: perfsonar_package == "perfsonar-testpoint"
+  tags: [ 'ps::install' ]
 
 - name: perfsonar-toolkit optional software
   include_tasks: toolkit.yml
-  when: perfsonar_package == "perfsonar-toolkit"
+  tags: [ 'ps::install' ]
+  when: perfsonar_bundle == "perfsonar-toolkit"
+
+- name: Install perfSONAR optional packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ perfsonar_optional_packages }}"
+  tags: [ 'ps::install' ]
+  when: perfsonar_bundle == "perfsonar-testpoint"
 
 - name: add ntpservers
   lineinfile:
     path: /etc/ntp.conf
     line: "server {{ item }}"
   with_items: "{{ perfsonar_ntpservers }}"
+  tags: [ 'ps::config' ]
   when: perfsonar_ntpservers is defined and perfsonar_ntpservers != none
   notify:
     - restart ntp
@@ -85,6 +108,7 @@
 - name: perfsonar_interface config
   command: /usr/lib/perfsonar/scripts/mod_interface_route --command add --device "{{ item['interface_name'] }}" --ipv4_gateway "{{ item['interface_gateway_ipv4'] }}"
   with_items: "{{ perfsonar_interfaces }}"
+  tags: [ 'ps::config' ]
   when: perfsonar_interfaces is defined and perfsonar_interfaces != none
 
 - name: disable root ssh
@@ -93,6 +117,7 @@
     path: /etc/ssh/sshd_config
     regexp: "^PermitRootLogin"
     line: "PermitRootLogin no"
+  tags: [ 'ps::config' ]
   when: perfsonar_disable_root_ssh is defined and perfsonar_disable_root_ssh == true
   notify:
     - restart ssh
@@ -100,5 +125,6 @@
 - name: troubleshoot pscheduler
   command: pscheduler troubleshoot "{{ item }}"
   with_items: "{{ perfsonar_troubleshoot }}"
+  tags: [ 'ps::install' ]
   when: perfsonar_troubleshoot is defined and perfsonar_troubleshoot != none
 

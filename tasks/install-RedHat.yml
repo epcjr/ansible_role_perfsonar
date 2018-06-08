@@ -8,6 +8,7 @@
     state: latest
     update_cache: yes
   ignore_errors: True
+  when: perfsonar_os_update == True
 
 - name: yum epel-release
   yum:
@@ -19,6 +20,13 @@
     name: http://software.internet2.edu/rpms/el7/x86_64/main/RPMS/perfSONAR-repo-0.8-1.noarch.rpm
     state: present
 
+- name: Use perfSONAR staging or nightly repository
+  yum:
+    name: perfSONAR-repo-{{ perfsonar_release }}
+    state: present
+  when:
+    - perfsonar_release == "staging" or perfsonar_release == "nightly"
+
 - name: yum clean all
   command: yum clean all
 
@@ -28,5 +36,4 @@
     name: yum-cron
     state: started
     enabled: yes
-  when: perfsonar_autoupdate is defined and perfsonar_autoupdate == true and
-        ansible_os_family == "RedHat"
+  when: perfsonar_autoupdate == true and ansible_os_family == "RedHat"
