@@ -72,15 +72,6 @@ Testpoint Variables.  These can elect to use optional packages normally included
 
       # See more here: http://docs.perfsonar.net/install_centos.html
       #
-      
-      perfsonar_optional_packages:
-        - perfsonar-toolkit-ntp
-        - perfsonar-toolkit-security
-        - perfsonar-toolkit-servicewatcher
-        - perfsonar-toolkit-sysctl
-        - perfsonar-toolkit-systemenv-testpoint
-        
-      
       # NTP more info: http://docs.perfsonar.net/manage_ntp.html
       #
       # System Tuning info here: http://docs.perfsonar.net/install_centos.html#step-3-verify-ntp-and-tuning-parameters
@@ -90,6 +81,15 @@ Testpoint Variables.  These can elect to use optional packages normally included
       # More here: http://docs.perfsonar.net/manage_security.html
       # Service watcher info: http://docs.perfsonar.net/install_centos.html#step-6-service-watcher
       #
+      
+      perfsonar_optional_packages:
+        - perfsonar-toolkit-ntp
+        - perfsonar-toolkit-security
+        - perfsonar-toolkit-servicewatcher
+        - perfsonar-toolkit-sysctl
+        - perfsonar-toolkit-systemenv-testpoint
+        
+      
       
 Host Variables, only set on a per-host basis.  They are undeclared by default.
 
