@@ -23,7 +23,7 @@ Group Variables, and their default values:
       #
       # This is a required option.
       #
-      perfsonar_package: 
+      perfsonar_bundle: 
       
       # This is a list of local users with ssh keys.  They will be
       # provisioned with user accounts on the perfSONAR nodes, and
@@ -52,6 +52,10 @@ Group Variables, and their default values:
       # A list of perfSONAR nodes to initially troubleshoot to after install.
       #
       perfsonar_troubleshoot: []
+      
+      # Update the underlaying OS before bundle install
+      #
+      perfsonar_os_update: false
 
 
 Toolkit Variables.  These manage the toolkit's web user.  They are undeclared by default.
