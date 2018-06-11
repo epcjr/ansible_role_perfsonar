@@ -56,6 +56,11 @@ Group Variables, and their default values:
       # Update the underlaying OS before bundle install
       #
       perfsonar_os_update: false
+      
+      # Autoupdate more info: http://docs.perfsonar.net/manage_update.html
+      #
+      perfsonar_autoupdate: false
+
 
 
 Toolkit Variables.  These manage the toolkit's web user.  They are undeclared by default.
@@ -68,26 +73,23 @@ Testpoint Variables.  These can elect to use optional packages normally included
       # See more here: http://docs.perfsonar.net/install_centos.html
       #
       
+      perfsonar_optional_packages:
+        - perfsonar-toolkit-ntp
+        - perfsonar-toolkit-security
+        - perfsonar-toolkit-servicewatcher
+        - perfsonar-toolkit-sysctl
+        - perfsonar-toolkit-systemenv-testpoint
+        
+      
       # NTP more info: http://docs.perfsonar.net/manage_ntp.html
       #
-      perfsonar_toolkit_ntp: false
-      
       # System Tuning info here: http://docs.perfsonar.net/install_centos.html#step-3-verify-ntp-and-tuning-parameters
       # More here: http://docs.perfsonar.net/manage_tuning.html
       #
-      perfsonar_toolkit_configure_sysctl: false
-      
       # Security module more info: http://docs.perfsonar.net/install_centos.html#step-4-firewall-and-security-considerations
       # More here: http://docs.perfsonar.net/manage_security.html
-      perfsonar_toolkit_security: false
-      
-      # Autoupdate more info: http://docs.perfsonar.net/manage_update.html
-      #
-      perfsonar_autoupdate: false
-      
       # Service watcher info: http://docs.perfsonar.net/install_centos.html#step-6-service-watcher
       #
-      perfsonar_toolkit_service_watcher: false
       
 Host Variables, only set on a per-host basis.  They are undeclared by default.
 
@@ -121,13 +123,13 @@ perfsonar_site.yml:
       vars_files:
         - vars/perfsonar_vars.yml
       roles:
-         - { role: epcjr.perfsonar, perfsonar_package: perfsonar-testpoint }
+         - { role: epcjr.perfsonar, perfsonar_bundle: perfsonar-testpoint }
 
     - hosts: toolkits
       vars_files:
         - vars/perfsonar_vars.yml
       roles:
-         - { role: epcjr.perfsonar, perfsonar_package: perfsonar-toolkit }
+         - { role: epcjr.perfsonar, perfsonar_bundle: perfsonar-toolkit }
 
 vars/perfsonar_vars.yml:
 
@@ -155,11 +157,13 @@ vars/perfsonar_vars.yml:
       perfsonar_web_passwd: secret
       
       #Variables for Testpoints Only
-      perfsonar_toolkit_ntp: true
-      perfsonar_toolkit_configure_sysctl: true
-      perfsonar_toolkit_security: true
-      perfsonar_autoupdate: true
-      perfsonar_toolkit_service_watcher: true
+      perfsonar_optional_packages:
+        - perfsonar-toolkit-ntp
+        - perfsonar-toolkit-security
+        - perfsonar-toolkit-servicewatcher
+        - perfsonar-toolkit-sysctl
+        - perfsonar-toolkit-systemenv-testpoint
+
       
 host_vars/example_ps_host
 
