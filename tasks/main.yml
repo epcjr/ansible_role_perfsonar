@@ -4,7 +4,7 @@
 - name: Load variables based on OS type
   include_vars: "{{ item }}"
   tags: [ 'always' ]
-  with:
+  with_items:
     - "{{ ansible_os_family }}.yml"
 
 - name: check to see if requested bundle is supported "{{ perfsonar_bundle }}"
