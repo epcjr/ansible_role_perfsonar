@@ -95,6 +95,17 @@
   tags: [ 'ps::install' ]
   when: perfsonar_bundle == "perfsonar-testpoint"
 
+- name: secure ntp
+  lineinfile:
+    path: /etc/ntp.conf
+    line: "{{ item }}"
+  with_items:
+    - "disable monitor"
+    - "restrict default ignore"
+  tags: [ 'ps::config' ]
+  notify:
+    - restart ntp
+
 - name: add ntpservers
   lineinfile:
     path: /etc/ntp.conf
