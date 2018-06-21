@@ -60,6 +60,7 @@
   with_items: "{{ perfsonar_users }}"
   tags: [ 'ps:config' ]
   when: perfsonar_users is defined and perfsonar_users != none
+  ignore_errors: yes
 
 - name: resolv.conf perfsonar_nameservers
   lineinfile:
