@@ -6,14 +6,16 @@
     path: /etc/hosts.allow
     line: "sshd: {{ item }}"
   with_items: "{{ perfsonar_bastion_hosts }}"
-  tags: [ 'ps:bastion' ]
+  tags:
+    - ps:bastion
   when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
 
 - name: hosts.deny sshd all for perfsonar_bastion hosts
   lineinfile:
     path: /etc/hosts.deny
     line: "sshd: all"
-  tags: [ 'ps:bastion' ]
+  tags:
+    - ps:bastion
   when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
 
 - name: Load variables based on OS type
@@ -25,7 +27,8 @@
 - name: check to see if requested bundle is supported "{{ perfsonar_bundle }}"
   fail:
     msg: "Unsupported bundle requested"
-  tags: [ 'ps:install' ]
+  tags:
+    - ps:install
   when: perfsonar_bundle != "perfsonar-toolkit" and
         perfsonar_bundle != "perfsonar-testpoint"
 
