@@ -1,6 +1,21 @@
 ---
 # tasks file for ansible-role-perfsonar/
 
+- name: hosts.allow for perfsonar_bastion hosts
+  lineinfile:
+    path: /etc/hosts.allow
+    line: "sshd: {{ item }}"
+  with_items: "{{ perfsonar_bastion_hosts }}"
+  tags: [ 'ps:bastion' ]
+  when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
+
+- name: hosts.deny sshd all for perfsonar_bastion hosts
+  lineinfile:
+    path: /etc/hosts.deny
+    line: "sshd: all"
+  tags: [ 'ps:bastion' ]
+  when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
+
 - name: Load variables based on OS type
   include_vars: "{{ item }}"
   tags: [ 'always' ]
@@ -20,21 +35,6 @@
   with_items: "{{ perfsonar_hostname }}"
   tags: [ 'ps:config' ]
   when: perfsonar_hostname is defined
-
-- name: hosts.allow for perfsonar_bastion hosts
-  lineinfile:
-    path: /etc/hosts.allow
-    line: "sshd: {{ item }}"
-  with_items: "{{ perfsonar_bastion_hosts }}"
-  tags: [ 'ps:config' ]
-  when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
-
-- name: hosts.deny sshd all for perfsonar_bastion hosts
-  lineinfile:
-    path: /etc/hosts.deny
-    line: "sshd: all"
-  tags: [ 'ps:config' ]
-  when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
 
 - name: group pssudo
   group:
