@@ -1,23 +1,6 @@
 ---
 # tasks file for ansible-role-perfsonar/
 
-- name: hosts.allow for perfsonar_bastion hosts
-  lineinfile:
-    path: /etc/hosts.allow
-    line: "sshd: {{ item }}"
-  with_items: "{{ perfsonar_bastion_hosts }}"
-  tags:
-    - ps:bastion
-  when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
-
-- name: hosts.deny sshd all for perfsonar_bastion hosts
-  lineinfile:
-    path: /etc/hosts.deny
-    line: "sshd: all"
-  tags:
-    - ps:bastion
-  when: perfsonar_bastion_hosts is defined and perfsonar_bastion_hosts != none
-
 - name: Load variables based on OS type
   include_vars: "{{ item }}"
   tags: [ 'always' ]
@@ -31,44 +14,6 @@
     - ps:install
   when: perfsonar_bundle != "perfsonar-toolkit" and
         perfsonar_bundle != "perfsonar-testpoint"
-
-- name: set perfsonar_hostname
-  hostname:
-    name: "{{ item }}"
-  with_items: "{{ perfsonar_hostname }}"
-  tags: [ 'ps:config' ]
-  when: perfsonar_hostname is defined
-
-- name: group pssudo
-  group:
-    name: pssudo
-    state: present
-  tags: [ 'ps:config' ]
-
-- name: adduser pssudo perfsonar_users
-  user:
-    name: "{{ item }}"
-    groups: pssudo
-  with_items: "{{ perfsonar_users }}"
-  tags: [ 'ps:config' ]
-  when: perfsonar_users is defined and perfsonar_users != none
-
-- name: set up authkeys for perfsonar_users
-  authorized_key:
-    user: "{{ item }}"
-    key: "{{ lookup('file', '/home/{{ item }}/.ssh/id_rsa.pub')}}"
-  with_items: "{{ perfsonar_users }}"
-  tags: [ 'ps:config' ]
-  when: perfsonar_users is defined and perfsonar_users != none
-  ignore_errors: yes
-
-- name: resolv.conf perfsonar_nameservers
-  lineinfile:
-    path: /etc/resolv.conf
-    line: "nameserver {{ item }}"
-  with_items: "{{ perfsonar_nameservers }}"
-  tags: [ 'ps:config' ]
-  when: perfsonar_nameservers is defined and perfsonar_nameservers != none
 
 - name: RedHat Specific Install
   include_tasks: install-RedHat.yml
@@ -99,17 +44,6 @@
   tags: [ 'ps::install' ]
   when: perfsonar_bundle == "perfsonar-testpoint"
 
-- name: secure ntp
-  lineinfile:
-    path: /etc/ntp.conf
-    line: "{{ item }}"
-  with_items:
-    - "disable monitor"
-    - "restrict default ignore"
-  tags: [ 'ps::config' ]
-  notify:
-    - restart ntp
-
 - name: add ntpservers
   lineinfile:
     path: /etc/ntp.conf
@@ -126,20 +60,8 @@
   tags: [ 'ps::config' ]
   when: perfsonar_interfaces is defined and perfsonar_interfaces != none
 
-- name: disable root ssh
-  lineinfile:
-    state: present
-    path: /etc/ssh/sshd_config
-    regexp: "^PermitRootLogin"
-    line: "PermitRootLogin no"
-  tags: [ 'ps::config' ]
-  when: perfsonar_disable_root_ssh is defined and perfsonar_disable_root_ssh == true
-  notify:
-    - restart ssh
-
 - name: troubleshoot pscheduler
   command: pscheduler troubleshoot "{{ item }}"
   with_items: "{{ perfsonar_troubleshoot }}"
   tags: [ 'ps::install' ]
   when: perfsonar_troubleshoot is defined and perfsonar_troubleshoot != none
-
