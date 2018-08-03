@@ -98,13 +98,13 @@ perfsonar_site.yml:
       vars_files:
         - vars/perfsonar_vars.yml
       roles:
-         - { role: epcjr.perfsonar, perfsonar_bundle: perfsonar-testpoint }
+         - { role: epcjr.ansible_role_perfsonar, perfsonar_bundle: perfsonar-testpoint }
 
     - hosts: toolkits
       vars_files:
         - vars/perfsonar_vars.yml
       roles:
-         - { role: epcjr.perfsonar, perfsonar_bundle: perfsonar-toolkit }
+         - { role: epcjr.ansible_role_perfsonar, perfsonar_bundle: perfsonar-toolkit }
 
 vars/perfsonar_vars.yml:
 
