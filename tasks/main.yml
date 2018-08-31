@@ -1,6 +1,13 @@
 ---
 # tasks file for ansible-role-perfsonar/
 
+- name: check to see if requested bundle is supported "{{ perfsonar_bundle }}"
+  fail:
+    msg: "Unsupported perfsonar_bundle requested"
+  tags: [ 'always' ]
+  when: perfsonar_bundle != "perfsonar-toolkit" and
+        perfsonar_bundle != "perfsonar-testpoint"
+
 - name: Load variables based on OS type
   include_vars: "{{ item }}"
   tags: [ 'always' ]
@@ -9,14 +16,6 @@
 
 # ps::install directives
 
-- name: check to see if requested bundle is supported "{{ perfsonar_bundle }}"
-  fail:
-    msg: "Unsupported perfsonar_bundle requested"
-  tags: [ 'ps::install' ]
-  when: perfsonar_bundle != "perfsonar-toolkit" and
-        perfsonar_bundle != "perfsonar-testpoint"
-
-# Add other OSes later
 - name: RedHat Install
   include_tasks: install-RedHat.yml
   tags: [ 'ps::install' ]

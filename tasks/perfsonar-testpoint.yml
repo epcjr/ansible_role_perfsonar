@@ -1,0 +1,9 @@
+---
+# perfsonar-testpoint.yml
+#
+
+- name: Install perfSONAR testpoint optional packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ perfsonar_optional_packages }}"

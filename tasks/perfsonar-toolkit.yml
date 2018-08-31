@@ -1,0 +1,29 @@
+---
+# perfsonar-toolkit.yml
+#
+
+- name: Make sure we can use htpasswd module
+  package:
+    name: python-passlib
+    state: latest
+  when: perfsonar_web_passwd is defined and perfsonar_web_password is not none and
+        perfsonar_web_user is defined and perfsonar_web_user is not none
+
+- name: cleartext perfsonar_web_passwd
+  command: "echo {{ perfsonar_web_passwd }}"
+  when: perfsonar_web_passwd is defined and perfsonar_web_passwd is not none and
+        perfsonar_show_password == true
+
+- name: htpasswd for perfsonar_web_user
+  htpasswd:
+    path: /etc/perfsonar/toolkit/psadmin.htpasswd
+    name: "{{ perfsonar_web_user }}"
+    password: "{{ perfsonar_web_passwd }}"
+    state: present
+  when: perfsonar_web_passwd is defined and perfsonar_web_password is not none and
+        perfsonar_web_user is defined and perfsonar_web_user is not none
+
+- name: restart ntp
+  command: echo restart ntp
+  notify:
+    - restart ntp

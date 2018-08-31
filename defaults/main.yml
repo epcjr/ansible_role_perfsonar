@@ -10,6 +10,8 @@ perfsonar_os_update: false
 perfsonar_ntpservers: []
 perfsonar_autoupdate: false
 perfsonar_troubleshoot: []
+# perfsonar_release options are: release staging nightly
+perfsonar_release: release
 
 # toolkit vars
 perfsonar_web_passwd:
@@ -22,6 +24,3 @@ perfsonar_optional_packages:
  - perfsonar-toolkit-servicewatcher
  - perfsonar-toolkit-sysctl
  - perfsonar-toolkit-systemenv-testpoint
-
-# perfsonar_release options are: release staging nightly
-perfsonar_release: release
