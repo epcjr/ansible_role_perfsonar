@@ -1,17 +1,15 @@
 ---
 # defaults file for ansible-role-perfsonar/
 
+# perfsonar_bundle valid options are: perfsonar-toolkit perfsonar-testpoint
 perfsonar_bundle:
 
 # group vars
-perfsonar_autoupdate: false
-perfsonar_bastion_hosts: []
 perfsonar_disable_root_ssh : false
-perfsonar_nameservers: []
-perfsonar_ntpservers: []
 perfsonar_os_update: false
+perfsonar_ntpservers: []
+perfsonar_autoupdate: false
 perfsonar_troubleshoot: []
-perfsonar_users: []
 
 # toolkit vars
 perfsonar_web_passwd:
@@ -25,6 +23,5 @@ perfsonar_optional_packages:
  - perfsonar-toolkit-sysctl
  - perfsonar-toolkit-systemenv-testpoint
 
-# release, staging, nightly
+# perfsonar_release options are: release staging nightly
 perfsonar_release: release
-

@@ -7,23 +7,20 @@
   with_items:
     - "{{ ansible_os_family }}.yml"
 
+# ps::install directives
+
 - name: check to see if requested bundle is supported "{{ perfsonar_bundle }}"
   fail:
-    msg: "Unsupported bundle requested"
-  tags:
-    - ps:install
+    msg: "Unsupported perfsonar_bundle requested"
+  tags: [ 'ps::install' ]
   when: perfsonar_bundle != "perfsonar-toolkit" and
         perfsonar_bundle != "perfsonar-testpoint"
 
-- name: RedHat Specific Install
+# Add other OSes later
+- name: RedHat Install
   include_tasks: install-RedHat.yml
   tags: [ 'ps::install' ]
   when: ansible_os_family == "RedHat"
-
-- name: Debian Specific Install
-  include_tasks: install-Debian.yml
-  tags: [ 'ps::install' ]
-  when: ansible_os_family == "Debian"
 
 - name: install bundle
   package:
@@ -31,18 +28,24 @@
     state: latest
   tags: [ 'ps::install' ]
 
-- name: perfsonar-toolkit optional software
-  include_tasks: toolkit.yml
+- name: bundle specific install directives
+  include_tasks: "{{ item }}"
   tags: [ 'ps::install' ]
-  when: perfsonar_bundle == "perfsonar-toolkit"
+  with_items:
+    - "{{ perfsonar_bundle }}.yml"
 
-- name: Install perfSONAR optional packages
-  package:
-    name: "{{ item }}"
+# ps::config directives
+
+- name: Disable ssh root access
+  lineinfile:
     state: present
-  with_items: "{{ perfsonar_optional_packages }}"
-  tags: [ 'ps::install' ]
-  when: perfsonar_bundle == "perfsonar-testpoint"
+    path: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin "
+    line: "PermitRootLogin no"
+  tags: [ 'ps::config' ]
+  when: perfsonar_disable_root_ssh
+  notify:
+    - restart ssh
 
 - name: add ntpservers
   lineinfile:
@@ -60,8 +63,10 @@
   tags: [ 'ps::config' ]
   when: perfsonar_interfaces is defined and perfsonar_interfaces != none
 
+# ps::running directives
+
 - name: troubleshoot pscheduler
   command: pscheduler troubleshoot "{{ item }}"
   with_items: "{{ perfsonar_troubleshoot }}"
-  tags: [ 'ps::install' ]
+  tags: [ 'ps::running' ]
   when: perfsonar_troubleshoot is defined and perfsonar_troubleshoot != none
