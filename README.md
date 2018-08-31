@@ -9,7 +9,7 @@ Requirements
 * Ansible on the jumpbox / bastion host
 * perfSONAR role installed
 
-      $ ansible-galaxy install -f epcjr.perfsonar
+      $ ansible-galaxy install -f epcjr.ansible_role_perfsonar
 
 Role Variables
 --------------
@@ -24,26 +24,6 @@ Group Variables, and their default values:
       # This is a required option.
       #
       perfsonar_bundle: 
-      
-      # This is a list of local users with ssh keys.  They will be
-      # provisioned with user accounts on the perfSONAR nodes, and
-      # their ssh keys will be copied over.
-      #
-      perfsonar_users: []
-      
-      # This is a list of bastion hosts.  If this list is populated,
-      # ssh will be restricted on the perfSONAR nodes to these machines
-      # only.
-      #
-      perfsonar_bastion_hosts: []
-      
-      # Disable root ssh if true
-      #
-      perfsonar_disable_root_ssh : false
-      
-      # A list of nameservers to add to resolv.conf
-      #
-      perfsonar_nameservers: []
       
       # A list of ntp servers to add to ntpd.conf
       #
@@ -89,14 +69,9 @@ Testpoint Variables.  These can elect to use optional packages normally included
         - perfsonar-toolkit-sysctl
         - perfsonar-toolkit-systemenv-testpoint
         
-      
-      
+        
 Host Variables, only set on a per-host basis.  They are undeclared by default.
 
-      # Set the hostname of the machine if set
-      #
-      perfsonar_hostname:
-      
       # This is used for multi-interface machines only.
       # Define the interface's name and gateway and it will set up the routes
       # with the perfSONAR multi-interface script.
@@ -123,26 +98,17 @@ perfsonar_site.yml:
       vars_files:
         - vars/perfsonar_vars.yml
       roles:
-         - { role: epcjr.perfsonar, perfsonar_bundle: perfsonar-testpoint }
+         - { role: epcjr.ansible_role_perfsonar, perfsonar_bundle: perfsonar-testpoint }
 
     - hosts: toolkits
       vars_files:
         - vars/perfsonar_vars.yml
       roles:
-         - { role: epcjr.perfsonar, perfsonar_bundle: perfsonar-toolkit }
+         - { role: epcjr.ansible_role_perfsonar, perfsonar_bundle: perfsonar-toolkit }
 
 vars/perfsonar_vars.yml:
 
-      # General perfsonar node settings
-      perfsonar_users:
-        - myuid
-      perfsonar_bastion_hosts:
-        - bastion.example.com
-      perfsonar_disable_root_ssh: true
-      # Use Google's public nameservers
-      perfsonar_nameservers:
-        - 8.8.8.8
-        - 8.8.4.4
+      # perfsonar node settings
       # add Google's ntp server
       perfsonar_ntpservers:
         - 216.239.35.0
@@ -168,13 +134,11 @@ vars/perfsonar_vars.yml:
 host_vars/example_ps_host
 
       # Set hostname and configure multiple interfaces
-      perfsonar_hostname: example_ps_host
       perfsonar_interfaces:
         - interface_name: em0
           interface_gateway_ipv4: 1.2.3.4
         - interface_name: p0p0
           interface_gateway_ipv4: 5.6.7.8
-
 
 
 License
