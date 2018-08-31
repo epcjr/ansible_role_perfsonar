@@ -22,8 +22,3 @@
     state: present
   when: perfsonar_web_passwd is defined and perfsonar_web_password is not none and
         perfsonar_web_user is defined and perfsonar_web_user is not none
-
-- name: restart ntp
-  command: echo restart ntp
-  notify:
-    - restart ntp
