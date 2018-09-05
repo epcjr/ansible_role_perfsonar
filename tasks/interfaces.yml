@@ -1,0 +1,16 @@
+---
+# tasks file interfaces.yml
+
+- name: perfsonar mod_interface_route command
+  command: /usr/lib/perfsonar/scripts/mod_interface_route --command add --device "{{ item['interface_name'] }}" --ipv4_gateway "{{ item['interface_gateway_ipv4'] }}"
+  with_items: "{{ perfsonar_interfaces }}"
+
+# add support for ifup-local and ifdown-local
+#/bin/sh
+#INTERFACE=$1
+#
+#if [ "$INTERFACE" == "eth0" ]; then
+#  /usr/lib/perfsonar/scripts/mod_interface_route --command add --device eth0 --ipv4_gateway 10.0.0.1 --ipv6_gateway fde1:40ff:e1a3:d50e::1
+#elif [ "$INTERFACE" == "eth1" ]; then
+#  /usr/lib/perfsonar/scripts/mod_interface_route --command add --device eth1 --ipv4_gateway 10.1.1.1 --ipv6_gateway fd7d:3189:ed46:2736::1
+#fi
